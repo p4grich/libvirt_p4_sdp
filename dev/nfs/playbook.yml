@@ -1,0 +1,96 @@
+- hosts: nfs.*
+  name: NFS host
+  tasks:
+
+  - name: Ensure group "perforce" exists with correct gid
+    ansible.builtin.group:
+      name: perforce
+      state: present
+      gid: 9004
+
+  - name: Add the user "perforce"
+    ansible.builtin.user:
+      name: perforce
+      comment: Perforce
+      uid: 9004
+      group: perforce
+      generate_ssh_key: yes
+      ssh_key_bits: 4096
+      ssh_key_file: .ssh/perforce.key
+
+  - name: Set authorized key for user "perforce" copying it from current user
+    ansible.posix.authorized_key:
+      user: perforce
+      state: present
+      key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/perforce.pub') }}"
+
+  - name: Add file /etc/sudoers.d/perforce
+    ansible.builtin.file:
+      path: /etc/sudoers.d/perforce
+      state: touch
+      owner: root
+      group: root
+      mode: '0600'
+
+  - name: Add sudo for user "perforce"
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers.d/perforce
+      state: present
+      owner: root
+      group: root
+      mode: '0400'
+      line: 'perforce ALL=(ALL) NOPASSWD:ALL'
+      validate: /usr/sbin/visudo -cf %s
+
+  - name: Install NFS
+    ansible.builtin.yum:
+      name: nfs-utils
+      state: present
+
+  - name: Add hxdepots path
+    ansible.builtin.file:
+      path: /nfs/hxdepots
+      state: directory
+      recurse: yes
+      owner: nobody
+      group: nobody
+
+  - name: Add NFS Export for "commit"
+    ansible.builtin.lineinfile:
+      path: /etc/exports
+      state: present
+      owner: root
+      group: root
+      mode: '0544'
+      line: '/nfs/hxdepots commit(rw,sync,no_subtree_check)'
+
+  - name: Add NFS Export for "commit-standby"
+    ansible.builtin.lineinfile:
+      path: /etc/exports
+      state: present
+      owner: root
+      group: root
+      mode: '0544'
+      line: '/nfs/hxdepots commit-standby(rw,sync,no_subtree_check)'
+
+  - name: Enable service rpcbind and start
+    ansible.builtin.service:
+      name: rpcbind
+      enabled: yes
+      state: started
+
+  - name: Enable service nfs-server and start
+    ansible.builtin.service:
+      name: nfs-server
+      enabled: yes
+      state: started
+
+  - name: Add "Domain" to idmapd.conf
+    ansible.builtin.lineinfile:
+      path: /etc/idmapd.conf
+      state: present
+      regexp: '^#Domain.*'
+      owner: root
+      group: root
+      mode: '0544'
+      line: Domain = {{ inventory_hostname.split('.', 1)[1] }}
