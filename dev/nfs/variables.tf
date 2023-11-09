@@ -14,7 +14,6 @@ variable "ssh_user" {
   default = "root"
 }
 
-
 variable "sdp_role" {
   type    = string
   description = "Deploy Perforce server by role SDP_ROLE: commit, commit-standy, edge, replica"

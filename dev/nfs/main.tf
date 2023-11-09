@@ -3,7 +3,7 @@ locals {
 }
 
 data "template_file" "sshpubkey" {
-  template = "${file("../../perforce.pub")}"
+  template = file("../../perforce.pub")
 }
 
 resource "libvirt_pool" "libvirt-pool" {
@@ -14,20 +14,20 @@ resource "libvirt_pool" "libvirt-pool" {
 
 # We fetch the latest rocky release image from their mirrors
 resource "libvirt_volume" "nfs-qcow2" {
-  name = "${local.fqdn}-qcow2"
-  pool = libvirt_pool.libvirt-pool.name
-  source = "${var.image_qcow2}"
+  name   = "${local.fqdn}-qcow2"
+  pool   = libvirt_pool.libvirt-pool.name
+  source = var.image_qcow2
   format = "qcow2"
 }
 
 data "template_file" "user_data" {
   template = file("${path.module}/cloud_init.cfg")
-  vars= {
-    domain = var.domain
-    fqdn = local.fqdn
-    hostname = var.hostname
-    ssh_user = var.ssh_user
-    ssh_pubkey =  "${data.template_file.sshpubkey.rendered}"
+  vars = {
+    domain     = var.domain
+    fqdn       = local.fqdn
+    hostname   = var.hostname
+    ssh_user   = var.ssh_user
+    ssh_pubkey = "${data.template_file.sshpubkey.rendered}"
   }
 }
 
@@ -51,12 +51,12 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 resource "libvirt_domain" "domain-nfs" {
   name   = local.fqdn
   memory = var.vm_memory
-  vcpu   = var.vm_vcpu 
+  vcpu   = var.vm_vcpu
 
   cloudinit = libvirt_cloudinit_disk.commoninit.id
 
   network_interface {
-    network_name = "sdp_network"
+    network_name   = "sdp_network"
     wait_for_lease = true
   }
 

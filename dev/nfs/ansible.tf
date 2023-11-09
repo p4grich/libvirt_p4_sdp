@@ -28,13 +28,13 @@ resource "ansible_group" "group" {
 }
 
 resource "ansible_playbook" "playbook" {
-  playbook   = "playbook.yml"
-  name       = local.fqdn
-  replayable = true
-  check_mode = false
+  playbook                = "playbook.yml"
+  name                    = local.fqdn
+  replayable              = true
+  check_mode              = false
   ignore_playbook_failure = true
-  verbosity = 6
+  verbosity               = 6
   extra_vars = {
-    ansible_user = "root"
+    ansible_user = local.decoded_vault_yaml.ansible_user
   }
 }
