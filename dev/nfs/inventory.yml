@@ -1,2 +1,4 @@
 ---
 plugin: cloud.terraform.terraform_provider
+project_path: ./
+state_file: ./terraform.tfstate

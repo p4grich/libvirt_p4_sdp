@@ -10,9 +10,11 @@ locals {
 resource "ansible_host" "host" {
   name   = local.fqdn
   groups = ["sdp"]
-
   variables = {
-    ansible_user = local.decoded_vault_yaml.ansible_user
+    network_cidr = var.network_cidr
+    hostname  = var.hostname
+    domain  = var.domain
+    fqdn  = local.fqdn
     # using jsonencode() here is needed to stringify 
     # a list that looks like: [ element_1, element_2, ..., element_N ]
     # yaml_list = jsonencode(local.decoded_vault_yaml.a_list)
@@ -35,6 +37,7 @@ resource "ansible_playbook" "playbook" {
   ignore_playbook_failure = true
   verbosity               = 6
   extra_vars = {
+    network_cidr = var.network_cidr
     ansible_user = local.decoded_vault_yaml.ansible_user
   }
 }
