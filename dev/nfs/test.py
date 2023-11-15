@@ -3,7 +3,8 @@ import subprocess
 import testinfra
 import json
 
-def test_get_vars(host):
+@pytest.fixture
+def get_ansible_vars(host):
   global ansible_user, network_cidr, domain, hostname, fqdn
   a_vars = host.ansible.get_variables()
   for k, v in a_vars.items():
@@ -48,10 +49,10 @@ def test_dir_hxdepots(host):
     assert host.file("/nfs/hxdepots").uid == 65534
     assert host.file("/nfs/hxdepots").gid == 65534
 
-def test_file_export_commit(host):
+def test_file_export_commit(host, get_ansible_vars):
     assert host.file("/etc/exports").content_string.splitlines()[0] == '/nfs/hxdepots ' + network_cidr +'(rw,sync,no_subtree_check)'
 
-def test_idmap_domain(host):
+def test_idmap_domain(host, get_ansible_vars):
     assert host.file("/etc/idmapd.conf").is_file is True
     assert host.file("/etc/idmapd.conf").content_string.splitlines()[4] == 'Domain = ' + domain
 
