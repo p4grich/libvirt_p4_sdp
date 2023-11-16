@@ -6,12 +6,12 @@ Software dependencies:
  - Terraform
  - Terragrunt
  - Python >= 3.9.1
- - pytest-testinfra
+ - Pytest-testinfra
  - Ansible
  - Perforce p4/p4d
  - Perforce SDP
  - Libvirt 
  - Libvirt-nss
  - Qemu-kvm
- - gnumake
+ - Gnumake
   
