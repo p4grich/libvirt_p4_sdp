@@ -14,14 +14,17 @@ def test_os_release(host, ansible_vars):
 def test_sshd_inactive(host):
     assert host.service("sshd").is_running is True 
 
-def test_user_perforce(host):
+def test_user_perforce(host, ansible_vars):
     assert host.user("perforce").exists is True
     assert host.user("perforce").uid == 9004
     assert host.user("perforce").gid == 9004
     assert host.user("perforce").group == "perforce"
     assert host.user("perforce").home == "/home/perforce"
     assert host.user("perforce").shell == "/bin/bash"
-    assert host.user("perforce").password == "!!"
+    if ansible_vars['distribution'] == "Debian":
+      assert host.user("perforce").password == "!"
+    else:
+      assert host.user("perforce").password == "!!"
 
 def test_sudo_perforce(host):
     assert host.file("/etc/sudoers.d/perforce").is_file is True
