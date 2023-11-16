@@ -21,7 +21,7 @@ def test_user_perforce(host, ansible_vars):
     assert host.user("perforce").group == "perforce"
     assert host.user("perforce").home == "/home/perforce"
     assert host.user("perforce").shell == "/bin/bash"
-    if ansible_vars['distribution'] == "Debian":
+    if ansible_vars['distribution'] == "Debian" or ansible_vars['distribution'] == "Ubuntu":
       assert host.user("perforce").password == "!"
     else:
       assert host.user("perforce").password == "!!"
