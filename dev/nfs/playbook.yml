@@ -1,5 +1,6 @@
-- hosts: nfs.*
+- hosts: nfs*
   name: NFS host
+  gather_facts: True
   tasks:
 
   - name: Upgrade all packages
@@ -55,6 +56,17 @@
       line: 'perforce ALL=(ALL) NOPASSWD:ALL'
       validate: /usr/sbin/visudo -cf %s
 
+  - name: Add "Domain" to idmapd.conf
+    ansible.builtin.lineinfile:
+      path: /etc/idmapd.conf
+      state: present
+      regexp: '^# Domain.*'
+      owner: root
+      group: root
+      mode: '0544'
+      line: Domain = {{ inventory_hostname.split('.', 1)[1] }}
+    when: ansible_facts['os_family'] == "Debian"
+
   - name: Install NFS-utils rpm
     ansible.builtin.yum:
       name: nfs-utils
@@ -91,7 +103,18 @@
       group: nogroup
     when: ansible_facts['os_family'] == "Debian"
 
-  - name: Add NFS Export for "commit" and commit-standby
+  - name: Add NFS Export for subnet
+    ansible.builtin.lineinfile:
+      path: /etc/exports
+      state: present
+      owner: root
+      group: root
+      mode: '0544'
+      insertbefore: '^# /etc/export.*'
+      line: "/nfs/hxdepots {{ network_cidr }}(rw,sync,no_subtree_check)"
+    when: ansible_facts['os_family'] == "Debian"
+
+  - name: Add NFS Export for subnet
     ansible.builtin.lineinfile:
       path: /etc/exports
       state: present
@@ -99,6 +122,7 @@
       group: root
       mode: '0544'
       line: "/nfs/hxdepots {{ network_cidr }}(rw,sync,no_subtree_check)"
+    when: ansible_facts['os_family'] == "RedHat"
 
   - name: Enable service rpcbind and start
     ansible.builtin.service:
@@ -106,6 +130,12 @@
       enabled: yes
       state: started
 
+  - name: Enable service nfs-idmapd.service and start
+    ansible.builtin.service:
+      name: nfs-idmapd.service
+      enabled: yes
+      state: started
+ 
   - name: Enable service nfs-server and start
     ansible.builtin.service:
       name: nfs-server
@@ -120,12 +150,3 @@
       state: started
     when: ansible_facts['os_family'] == "Debian"
 
-  - name: Add "Domain" to idmapd.conf
-    ansible.builtin.lineinfile:
-      path: /etc/idmapd.conf
-      state: present
-      regexp: '^#Domain.*'
-      owner: root
-      group: root
-      mode: '0544'
-      line: Domain = {{ inventory_hostname.split('.', 1)[1] }}

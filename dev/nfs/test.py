@@ -11,8 +11,15 @@ def test_os_release(host, ansible_vars):
     print("Distribution:", ansible_vars['distribution'])
     assert host.file("/etc/os-release").contains(ansible_vars['distribution'])
 
-def test_sshd_inactive(host):
-    assert host.service("sshd").is_running is True 
+def test_ssh_service(host, ansible_vars):
+    if ansible_vars['distribution'] == "Debian" or ansible_vars['distribution'] == "Ubuntu":
+      assert host.service("ssh").is_running is True
+      assert host.service("ssh").is_valid is True
+    else:
+      assert host.service("sshd").exists is True
+      assert host.service("sshd").is_running is True
+      assert host.service("sshd").is_enabled is True
+      assert host.service("sshd").is_valid is True
 
 def test_user_perforce(host, ansible_vars):
     assert host.user("perforce").exists is True
@@ -34,10 +41,14 @@ def test_sudo_perforce(host):
     assert host.file("/etc/sudoers.d/perforce").mode == 0o400
     assert host.file("/etc/sudoers.d/perforce").content_string.strip() == 'perforce ALL=(ALL) NOPASSWD:ALL'
 
-def test_dir_hxdepots(host):
-    assert host.file("/nfs/hxdepots").is_directory is True
-    assert host.file("/nfs/hxdepots").uid == 65534
-    assert host.file("/nfs/hxdepots").gid == 65534
+def test_dir_hxdepots(host,ansible_vars):
+    if ansible_vars['distribution'] == "Debian" or ansible_vars['distribution'] == "Ubuntu":
+      assert host.file("/nfs/hxdepots").is_directory is True
+      assert host.file("/nfs/hxdepots").uid == 65534
+    else:
+      assert host.file("/nfs/hxdepots").is_directory is True
+      assert host.file("/nfs/hxdepots").uid == 65534
+      assert host.file("/nfs/hxdepots").gid == 65534
 
 def test_file_export_commit(host, ansible_vars):
     print("Network: ", ansible_vars['network_cidr'])

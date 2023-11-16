@@ -23,9 +23,16 @@ variable "sdp_role" {
 
 variable "distribution" {
   type    = string
-  description = "Deploy OS distributiona and drive tests."
+  description = "Set OS distribution and drive tests. AKA ansible_distribution"
   default = "Rocky"
 }
+
+variable "os_family" {
+  type    = string
+  description = "Set OS distribution and drive tests. AKA ansible os_family"
+  default = "RedHat"
+}
+
 variable "image_qcow2" {
   type    = string
   description = "Get qcow2 image IMAGE_QCOW2: URL or local path"
@@ -48,4 +55,10 @@ variable "vm_vcpu" {
   type    = number
   description = "Set the number of VM vcpu's"
   default = "1"
+}
+
+variable "vm_volsize" {
+  type    = number
+  description = "Set the volume size in bytes. default is 10GB"
+  default = "10000000000"
 }
