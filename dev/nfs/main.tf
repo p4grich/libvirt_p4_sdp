@@ -12,12 +12,28 @@ resource "libvirt_pool" "libvirt-pool" {
   path = "/tmp/terraform-provider-libvirt-pool-${local.fqdn}"
 }
 
-# We fetch the latest rocky release image from their mirrors
-resource "libvirt_volume" "nfs-qcow2" {
-  name   = "${local.fqdn}-qcow2"
+# We fetch the latest release image from a mirrors
+resource "libvirt_volume" "base-nfs-qcow2" {
+  name   =  "base-${local.fqdn}-qcow2"
   pool   = libvirt_pool.libvirt-pool.name
   source = var.image_qcow2
   format = "qcow2"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+# We fetch the latest release image from a mirrors
+resource "libvirt_volume" "nfs-qcow2" {
+  name   = "${local.fqdn}-qcow2"
+  pool   = libvirt_pool.libvirt-pool.name
+  base_volume_id = libvirt_volume.base-nfs-qcow2.id
+  format = "qcow2"
+  size   = var.vm_volsize
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 data "template_file" "user_data" {
@@ -60,7 +76,6 @@ resource "libvirt_domain" "domain-nfs" {
     wait_for_lease = true
   }
 
-
   # IMPORTANT: this is a known bug on cloud images, since they expect a console
   # we need to pass it
   # https://bugs.launchpad.net/cloud-images/+bug/1573095
@@ -84,5 +99,9 @@ resource "libvirt_domain" "domain-nfs" {
     type        = "spice"
     listen_type = "address"
     autoport    = true
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
