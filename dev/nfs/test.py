@@ -1,5 +1,4 @@
 import pytest
-import subprocess
 import testinfra
 import json
 
@@ -8,8 +7,9 @@ def ansible_vars(host):
   a_vars = host.ansible.get_variables()
   return a_vars
 
-def test_os_release(host):
-    assert host.file("/etc/os-release").contains("Rocky")
+def test_os_release(host, ansible_vars):
+    print("Distribution:", ansible_vars['distribution'])
+    assert host.file("/etc/os-release").contains(ansible_vars['distribution'])
 
 def test_sshd_inactive(host):
     assert host.service("sshd").is_running is True 

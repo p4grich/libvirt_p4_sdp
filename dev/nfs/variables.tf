@@ -17,10 +17,15 @@ variable "ssh_user" {
 
 variable "sdp_role" {
   type    = string
-  description = "Deploy Perforce server by role SDP_ROLE: commit, commit-standy, edge, replica"
+  description = "Deploy Perforce server by role SDP_ROLE: commit, commit-standy, commit-nfs, edge, edge-nfs, replica, replica-nfs"
   default = "commit"
 }
 
+variable "distribution" {
+  type    = string
+  description = "Deploy OS distributiona and drive tests."
+  default = "Rocky"
+}
 variable "image_qcow2" {
   type    = string
   description = "Get qcow2 image IMAGE_QCOW2: URL or local path"
