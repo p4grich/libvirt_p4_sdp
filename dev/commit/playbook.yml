@@ -1,0 +1,14 @@
+- name: Commit playbook
+  hosts: commit*
+  roles:
+    - { role: ../../ansible/roles/Debian, when: ansible_os_family == 'Debian' }
+    - { role: ../../ansible/roles/RedHat, when: ansible_os_family == 'RedHat' }
+    - { role: ../../ansible/roles/Perforce, when: sdp_role == 'commit' }
+    - { role: ../../ansible/roles/SDP, when: sdp_role == 'commit' }
+  tasks:
+  - name: Dump Facts
+    delegate_to: localhost
+    run_once: true
+    copy:
+      content: "{{ hostvars[inventory_hostname] | to_nice_json }}"
+      dest: dump_facts.json

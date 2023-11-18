@@ -15,8 +15,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    path  = "${path_relative_to_include()}/terraform.tfstate"
-    #path  = "terraform.tfstate"
+    path = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/terraform.tfstate"
     
   }
 }

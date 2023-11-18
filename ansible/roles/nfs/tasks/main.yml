@@ -12,6 +12,16 @@
     name: nfs-utils
     state: present
 
+- name: Add "Domain" to idmapd.conf
+  ansible.builtin.lineinfile:
+    path: /etc/idmapd.conf
+    state: present
+    regexp: '^#Domain.*'
+    owner: root
+    group: root
+    mode: '0544'
+    line: Domain = {{ inventory_hostname.split('.', 1)[1] }}
+
 - name: Add NFS Export for subnet
   ansible.builtin.lineinfile:
     path: /etc/exports

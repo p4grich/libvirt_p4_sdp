@@ -38,3 +38,4 @@ provider.tf
 versions.tf
 .vaultpass
 tf.log
+dump_facts.json
