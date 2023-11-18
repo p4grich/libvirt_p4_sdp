@@ -42,5 +42,6 @@ resource "ansible_playbook" "playbook" {
     sdp_role = "nfs"
     network_cidr = var.network_cidr
     ansible_user = local.decoded_vault_yaml.ansible_user
+    ansible_os_family 
   }
 }
