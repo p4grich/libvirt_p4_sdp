@@ -20,7 +20,7 @@ resource "libvirt_volume" "base-nfs-qcow2" {
   format = "qcow2"
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 # We fetch the latest release image from a mirrors
@@ -32,7 +32,7 @@ resource "libvirt_volume" "nfs-qcow2" {
   size   = var.vm_volsize
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
@@ -102,6 +102,6 @@ resource "libvirt_domain" "domain-nfs" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
