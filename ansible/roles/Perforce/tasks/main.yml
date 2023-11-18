@@ -1,0 +1,21 @@
+- name: Ensure group "perforce" exists with correct gid
+  ansible.builtin.group:
+    name: perforce
+    state: present
+    gid: 9004
+
+- name: Add the user perforce
+  ansible.builtin.user:
+    name: perforce
+    comment: Perforce
+    uid: 9004
+    group: perforce
+    generate_ssh_key: yes
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/perforce.key
+
+- name: Set authorized key for user "perforce" copying it from current user
+  ansible.posix.authorized_key:
+    user: perforce
+    state: present
+    key: "{{ lookup('file', '../../../../perforce.pub') }}"
