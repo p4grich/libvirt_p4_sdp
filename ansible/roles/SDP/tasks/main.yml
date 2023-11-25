@@ -1,23 +1,32 @@
-  - name: Add hxlogs path
-    ansible.builtin.file:
-      path: /hxlogs
-      state: directory
-      owner: perforce
-      group: perforce
-      mode: '0755'
+- name: Add hxlogs path
+  ansible.builtin.file:
+    path: /hxlogs
+    state: directory
+    owner: perforce
+    group: perforce
+    mode: '0755'
 
-  - name: Add hxdepots path
-    ansible.builtin.file:
-      path: /hxdepots
-      state: directory
-      owner: perforce
-      group: perforce
-      mode: '0755'
+- name: Add hxdepots path
+  ansible.builtin.file:
+    path: /hxdepots
+    state: directory
+    owner: perforce
+    group: perforce
+    mode: '0755'
 
-  - name: Add hxmetadata path
-    ansible.builtin.file:
-      path: /hxmetadata
-      state: directory
-      owner: perforce
-      group: perforce
-      mode: '0755'
+- name: Add hxmetadata path
+  ansible.builtin.file:
+    path: /hxmetadata
+    state: directory
+    owner: perforce
+    group: perforce
+    mode: '0755'
+
+- name: Add NFS mounts
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^127\.0\.0\.1'
+    line: 127.0.0.1 localhost
+    owner: root
+    group: root
+    mode: '0644'

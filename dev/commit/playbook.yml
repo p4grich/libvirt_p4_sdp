@@ -12,3 +12,12 @@
     copy:
       content: "{{ hostvars[inventory_hostname] | to_nice_json }}"
       dest: dump_facts.json
+
+  - name: Check DNS
+    ansible.builtin.shell: "nslookup {{ inventory_hostname }} {{ ansible_default_ipv4.gateway }} |grep Address |grep -v \\# |awk '{print $2}'"
+    register: dns_check
+
+  - name: Reboot machine and send a message if DNS is not registered
+    ansible.builtin.reboot:
+      msg: "Rebooting machine in 5 seconds"
+    when:  ansible_default_ipv4.address != dns_check.stdout

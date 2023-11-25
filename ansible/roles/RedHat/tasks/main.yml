@@ -2,3 +2,36 @@
   ansible.builtin.yum:
     name: '*'
     state: latest
+  register: yum_update
+
+- name: Install bind-utils
+  ansible.builtin.yum:
+    name: 'bind-utils'
+    state: latest
+
+#- name: Should system be rebooted?
+#  ansible.builtin.debug:
+#    msg: "This should be a reboot"
+#  when:
+#    - yum_update.changed
+#    - (yum_update.results[0] | regex_search('kernel')) is not none
+
+- name: Check if reboot_required
+  shell:
+    cmd: "needs-restarting -r"
+  changed_when: false
+  failed_when: reboot_required.rc != 0 and reboot_required.rc != 1
+  check_mode: false
+  register: reboot_required
+
+- name: Report reboot_required
+  debug:
+    msg: "{{  reboot_required.rc | bool }} "
+  changed_when: reboot_required.rc == 1
+  check_mode: false
+
+- name: Reboot machine for package updates
+  ansible.builtin.reboot:
+    msg: "Rebooting machine in 5 seconds"
+  when: reboot_required.rc == 1
+

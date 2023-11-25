@@ -56,6 +56,7 @@ resource "libvirt_domain" "libvirt-domain" {
 
   network_interface {
     network_name = "sdp_network"
+    wait_for_lease = true
   }
 
   # IMPORTANT: this is a known bug on cloud images, since they expect a console
