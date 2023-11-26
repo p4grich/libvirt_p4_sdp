@@ -23,8 +23,14 @@ def test_nfs_hxdepots_mount(host):
     assert host.file("/hxdepots").gid == 9004
     assert host.mount_point("/hxdepots").exists is True
 
-def test_nfs_hxlogs_mount(host):
+def test_dir_hxlogs(host):
     assert host.file("/hxlogs").exists is True
+    assert host.file("/hxlogs").uid == 9004
+    assert host.file("/hxlogs").gid == 9004
+    assert host.mount_point("/hxlogs").exists is False
 
-def test_nfs_hxmetadata_mount(host):
+def test_dir_hxmetadata(host):
     assert host.file("/hxmetadata").exists is True
+    assert host.file("/hxmetadata").uid == 9004
+    assert host.file("/hxmetadata").gid == 9004
+    assert host.mount_point("/hxmetadata").exists is False
