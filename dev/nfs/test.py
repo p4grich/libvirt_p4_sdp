@@ -23,20 +23,22 @@ def test_ssh_service(host, ansible_magic_vars):
       assert host.service("sshd").is_enabled is True
       assert host.service("sshd").is_valid is True
 
-def test_no_user_perforce(host, ansible_vars):
-    assert host.user("perforce").exists is False
+def test_user_perforce(host, ansible_vars):
+    assert host.user("perforce").exists is True
+    assert host.user("perforce").uid == 9004
+    assert host.user("perforce").gid == 9004
 
 def test_no_sudo_perforce(host):
     assert host.file("/etc/sudoers.d/perforce").is_file is False
 
 def test_dir_hxdepots(host):
       assert host.file("/nfs/hxdepots").is_directory is True
-      assert host.file("/nfs/hxdepots").uid == 65534
-      assert host.file("/nfs/hxdepots").gid == 65534
+      assert host.file("/nfs/hxdepots").uid == 9004 
+      assert host.file("/nfs/hxdepots").gid == 9004 
 
 def test_file_export_commit(host, ansible_vars):
     print("Network: ", ansible_vars['network_cidr'])
-    assert host.file("/etc/exports").content_string.splitlines()[0] == '/nfs/hxdepots ' + ansible_vars['network_cidr'] + '(rw,sync,no_subtree_check)'
+    assert host.file("/etc/exports").content_string.splitlines()[0] == '/nfs/hxdepots ' + ansible_vars['network_cidr'] + '(rw,sync,subtree_check)'
 
 def test_idmap_domain(host, ansible_magic_vars):
     print("Domain: ", ansible_magic_vars['ansible_domain'])

@@ -4,8 +4,8 @@
     path: /nfs/hxdepots
     state: directory
     recurse: yes
-    owner: nobody
-    group: nobody
+    owner: perforce
+    group: perforce
 
 - name: Install NFS-utils rpm
   ansible.builtin.yum:
@@ -29,7 +29,7 @@
     owner: root
     group: root
     mode: '0544'
-    line: "/nfs/hxdepots {{ network_cidr }}(rw,sync,no_subtree_check)"
+    line: "/nfs/hxdepots {{ network_cidr }}(rw,sync,subtree_check)"
 
 - name: Enable service rpcbind and start
   ansible.builtin.service:
@@ -48,4 +48,3 @@
     name: nfs-server
     enabled: yes
     state: started
-

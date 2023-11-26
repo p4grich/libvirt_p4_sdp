@@ -16,6 +16,7 @@ resource "ansible_host" "host" {
     #domain  = var.domain
     #fqdn  = local.fqdn
     #distribution = var.distribution
+    sdp_commit_nfs_host = var.sdp_commit_nfs_host
     sdp_role = var.sdp_role
     # using jsonencode() here is needed to stringify 
     # a list that looks like: [ element_1, element_2, ..., element_N ]

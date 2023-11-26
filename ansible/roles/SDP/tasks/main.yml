@@ -22,11 +22,14 @@
     group: perforce
     mode: '0755'
 
+- name: Get NFS host IP Address
+  ansible.builtin.shell: "nslookup {{sdp_commit_nfs_host}} |grep Address |grep -v \\# |awk '{print $2}'"
+  register: nfs_host_ip
+
 - name: Add NFS mounts
   ansible.builtin.lineinfile:
     path: /etc/fstab
-    regexp: '^127\.0\.0\.1'
-    line: 127.0.0.1 localhost
+    line: "{{nfs_host_ip.stdout}}:/nfs/hxdepots /hxdepots nfs defaults 0 0"
     owner: root
     group: root
     mode: '0644'

@@ -21,6 +21,12 @@ variable "sdp_role" {
   default = "commit"
 }
 
+variable "sdp_commit_nfs_host" {
+  type    = string
+  description = "Set hostname for commit server NFS Server"
+  default = "nfs.local"
+}
+
 variable "distribution" {
   type    = string
   description = "Set OS distribution and drive tests. AKA ansible_distribution"

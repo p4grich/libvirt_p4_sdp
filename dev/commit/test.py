@@ -19,6 +19,8 @@ def test_perforce_user(host):
 
 def test_nfs_hxdepots_mount(host):
     assert host.file("/hxdepots").exists is True
+    assert host.file("/hxdepots").uid == 9004
+    assert host.file("/hxdepots").gid == 9004
     assert host.mount_point("/hxdepots").exists is True
 
 def test_nfs_hxlogs_mount(host):

@@ -3,6 +3,7 @@
   gather_facts: True
   roles:
     - { role: ../../ansible/roles/RedHat, when: ansible_os_family == 'RedHat' }
+    - { role: ../../ansible/roles/Perforce, when: sdp_role == 'nfs' }
     - { role: ../../ansible/roles/nfs, when: sdp_role == 'nfs' }
 
   tasks:
