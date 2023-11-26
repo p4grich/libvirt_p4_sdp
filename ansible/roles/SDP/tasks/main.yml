@@ -30,6 +30,7 @@
   ansible.builtin.lineinfile:
     path: /etc/fstab
     line: "{{nfs_host_ip.stdout}}:/nfs/hxdepots /hxdepots nfs defaults 0 0"
+    insertafter: '^#'
     owner: root
     group: root
     mode: '0644'
