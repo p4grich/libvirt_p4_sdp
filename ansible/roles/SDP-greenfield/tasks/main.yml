@@ -29,7 +29,7 @@
 - name: Make installer cfg
   ansible.builtin.shell: /hxdepots/reset/reset_sdp.sh -C > /hxdepots/reset/settings.cfg 
 
-- name: Make installer cfg
+- name: Run installer cfg
   ansible.builtin.shell: /hxdepots/reset/reset_sdp.sh -c /hxdepots/reset/settings.cfg 2>&1 | tee log.reset_sdp
   become: yes
   become_user: root

@@ -12,3 +12,17 @@
     remote_src: yes
   become: true
   become_user: perforce
+
+- name: Rrestorecon p4d_1_init
+  ansible.builtin.shell: "restorecon -vF /p4/1/bin/p4d_1_init"
+
+- name: Rrestorecon p4d_1_init
+  ansible.builtin.shell: "restorecon -vF /p4/1/bin/p4d_1_init"
+
+- name: Rrestorecon p4broker_1_init
+  ansible.builtin.shell: "restorecon -vF /p4/1/bin/p4broker_1_init"
+
+- name: Semanage fcontext p4broker_1_init
+  ansible.builtin.shell: "semanage fcontext -a -t bin_t /p4/1/bin/p4broker_1_init"
+
+

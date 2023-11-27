@@ -14,6 +14,15 @@
     group: perforce
     mode: '0755'
 
+- name: Add helix_binaries directory
+  ansible.builtin.file:
+    path: /hxdepots/helix_binaries
+    state: directory
+    owner: perforce
+    group: perforce
+    mode: '0755'
+
+
 - name: Add hxmetadata directory
   ansible.builtin.file:
     path: /hxmetadata
@@ -45,3 +54,35 @@
     path: ~/.ansible/tmp
   become: true
   become_user: perforce
+
+- name: Get Perforce cli p4
+  ansible.builtin.get_url:
+    url: https://ftp.perforce.com/perforce/{{perforce_release}}/bin.{{perforce_arch}}/p4
+    dest: /hxdepots/helix_binaries
+    mode: '0755'
+    owner: perforce
+    group: perforce
+
+- name: Get Perforce server p4d
+  ansible.builtin.get_url:
+    url: https://ftp.perforce.com/perforce/{{perforce_release}}/bin.{{perforce_arch}}/p4d
+    dest: /hxdepots/helix_binaries
+    mode: '0755'
+    owner: perforce
+    group: perforce
+
+- name: Get Perforce proxy p4p
+  ansible.builtin.get_url:
+    url: https://ftp.perforce.com/perforce/{{perforce_release}}/bin.{{perforce_arch}}/p4p
+    dest: /hxdepots/helix_binaries
+    mode: '0755'
+    owner: perforce
+    group: perforce
+
+- name: Get Perforce proxy p4broker
+  ansible.builtin.get_url:
+    url: https://ftp.perforce.com/perforce/{{perforce_release}}/bin.{{perforce_arch}}/p4broker
+    dest: /hxdepots/helix_binaries
+    mode: '0755'
+    owner: perforce
+    group: perforce

@@ -44,6 +44,17 @@ variable "sdp_archive" {
   description = "Perforce SDP Archive type: tgz || zip"
   default = "tgz"
 }
+variable "perforce_arch" {
+  type    = string
+  description = "Perforce architecture type: linux26x86_64 || ntx64"
+  default = "linux26x86_64"
+}
+
+variable "perforce_release" {
+  type    = string
+  description = "Perforce release: r23.1 || r22.1 || etc..."
+  default = "r23.1"
+}
 
 variable "sdp_green_field_installer" {
   type    = string
