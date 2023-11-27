@@ -45,18 +45,3 @@
     path: ~/.ansible/tmp
   become: true
   become_user: perforce
-
-- name: Get Perforce SDP
-  ansible.builtin.get_url:
-    url: https://swarm.workshop.perforce.com/downloads/guest/perforce_software/sdp/downloads/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
-    dest: /hxdepots/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
-  become: true
-  become_user: perforce
-
-- name: Unarchive Perforce SDP
-  ansible.builtin.unarchive:
-    src: /hxdepots/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
-    dest: /hxdepots
-    remote_src: yes
-  become: true
-  become_user: perforce

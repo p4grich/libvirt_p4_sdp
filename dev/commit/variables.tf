@@ -45,6 +45,12 @@ variable "sdp_archive" {
   default = "tgz"
 }
 
+variable "sdp_green_field_installer" {
+  type    = string
+  description = "Perforce SDP green field installer: yes || no"
+  default = "no"
+}
+
 variable "distribution" {
   type    = string
   description = "Set OS distribution and drive tests. AKA ansible_distribution"

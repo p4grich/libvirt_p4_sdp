@@ -13,6 +13,7 @@ resource "ansible_host" "host" {
   variables = {
     sdp_commit_nfs_host = var.sdp_commit_nfs_host
     sdp_role = var.sdp_role
+    sdp_green_field_installer = var.sdp_green_field_installer
     # using jsonencode() here is needed to stringify 
     # a list that looks like: [ element_1, element_2, ..., element_N ]
     # yaml_list = jsonencode(local.decoded_vault_yaml.a_list)
