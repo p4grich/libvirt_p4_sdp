@@ -1,5 +1,4 @@
 import pytest
-import subprocess
 import testinfra
 
 def test_os_release(host):
@@ -34,3 +33,7 @@ def test_dir_hxmetadata(host):
     assert host.file("/hxmetadata").uid == 9004
     assert host.file("/hxmetadata").gid == 9004
     assert host.mount_point("/hxmetadata").exists is False
+
+def test_package_install(host):
+    assert host.package("unzip").is_installed
+    assert host.package("bind-utils").is_installed

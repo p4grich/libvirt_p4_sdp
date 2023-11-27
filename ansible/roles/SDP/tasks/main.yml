@@ -1,4 +1,4 @@
-- name: Add hxlogs path
+- name: Add hxlogs directory
   ansible.builtin.file:
     path: /hxlogs
     state: directory
@@ -6,7 +6,7 @@
     group: perforce
     mode: '0755'
 
-- name: Add hxdepots path
+- name: Add hxdepots directory
   ansible.builtin.file:
     path: /hxdepots
     state: directory
@@ -14,7 +14,7 @@
     group: perforce
     mode: '0755'
 
-- name: Add hxmetadata path
+- name: Add hxmetadata directory
   ansible.builtin.file:
     path: /hxmetadata
     state: directory
@@ -34,3 +34,29 @@
     owner: root
     group: root
     mode: '0644'
+
+- name: Run NFS mount
+  ansible.builtin.shell: "mount /hxdepots"
+  register: nfs_mount_status
+
+- name: Create ansible temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    path: ~/.ansible/tmp
+  become: true
+  become_user: perforce
+
+- name: Get Perforce SDP
+  ansible.builtin.get_url:
+    url: https://swarm.workshop.perforce.com/downloads/guest/perforce_software/sdp/downloads/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
+    dest: /hxdepots/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
+  become: true
+  become_user: perforce
+
+- name: Unarchive Perforce SDP
+  ansible.builtin.unarchive:
+    src: /hxdepots/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
+    dest: /hxdepots
+    remote_src: yes
+  become: true
+  become_user: perforce

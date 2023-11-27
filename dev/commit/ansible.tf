@@ -11,11 +11,6 @@ resource "ansible_host" "host" {
   name   = local.fqdn
   groups = ["sdp"]
   variables = {
-    #network_cidr = var.network_cidr
-    #hostname  = var.hostname
-    #domain  = var.domain
-    #fqdn  = local.fqdn
-    #distribution = var.distribution
     sdp_commit_nfs_host = var.sdp_commit_nfs_host
     sdp_role = var.sdp_role
     # using jsonencode() here is needed to stringify 
@@ -29,6 +24,9 @@ resource "ansible_group" "group" {
   children = ["sdp_p4d_servers"]
   variables = {
     ansible_user = local.decoded_vault_yaml.ansible_user
+    sdp_release_version = var.sdp_release_version
+    sdp_platform = var.sdp_platform
+    sdp_archive = var.sdp_archive
   }
 }
 

@@ -9,12 +9,10 @@
     name: 'bind-utils'
     state: latest
 
-#- name: Should system be rebooted?
-#  ansible.builtin.debug:
-#    msg: "This should be a reboot"
-#  when:
-#    - yum_update.changed
-#    - (yum_update.results[0] | regex_search('kernel')) is not none
+- name: Install unzip
+  ansible.builtin.yum:
+    name: 'unzip'
+    state: latest
 
 - name: Check if reboot_required
   shell:

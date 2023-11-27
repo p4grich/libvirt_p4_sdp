@@ -27,6 +27,24 @@ variable "sdp_commit_nfs_host" {
   default = "nfs.local"
 }
 
+variable "sdp_release_version" {
+  type    = string
+  description = "Perforce SDP Version: https://swarm.workshop.perforce.com/files/guest/perforce_software/sdp/downloads"
+  default = "2018.1.23504"
+}
+
+variable "sdp_platform" {
+  type    = string
+  description = "Perforce SDP Platform: Unix || Windows"
+  default = "Unix"
+}
+
+variable "sdp_archive" {
+  type    = string
+  description = "Perforce SDP Archive type: tgz || zip"
+  default = "tgz"
+}
+
 variable "distribution" {
   type    = string
   description = "Set OS distribution and drive tests. AKA ansible_distribution"
