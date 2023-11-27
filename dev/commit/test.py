@@ -53,4 +53,5 @@ def test_package_install(host):
     assert host.package("which").is_installed
     assert host.package("zlib").is_installed
     assert host.package("zlib-devel").is_installed
+    assert host.package("policycoreutils-python-utils").is_installed
 

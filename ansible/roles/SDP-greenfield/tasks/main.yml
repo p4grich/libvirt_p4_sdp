@@ -1,14 +1,35 @@
+- name: Add reset directory
+  ansible.builtin.file:
+    path: /hxdepots/reset
+    mode: '0755'
+    owner: perforce
+    group: perforce
+    state: directory
+
+- name: Add helix_binaries directory
+  ansible.builtin.file:
+    path: /hxdepots/helix_binaries
+    mode: '0755'
+    owner: perforce
+    group: perforce
+    state: directory
+
 - name: Get Perforce SDP
   ansible.builtin.get_url:
-    url: https://swarm.workshop.perforce.com/downloads/guest/perforce_software/sdp/downloads/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
-    dest: /hxdepots/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
-  become: true
-  become_user: perforce
+    url: https://swarm.workshop.perforce.com/downloads/guest/perforce_software/helix-installer/main/src/reset_sdp.sh
+    dest: /hxdepots/reset
 
-- name: Unarchive Perforce SDP
-  ansible.builtin.unarchive:
-    src: /hxdepots/sdp.{{sdp_platform}}.{{sdp_release_version}}.{{sdp_archive}}
-    dest: /hxdepots
-    remote_src: yes
-  become: true
-  become_user: perforce
+- name: Chmod installer
+  ansible.builtin.file:
+    path: /hxdepots/reset/reset_sdp.sh
+    mode: '0755'
+    owner: perforce
+    group: perforce
+
+- name: Make installer cfg
+  ansible.builtin.shell: /hxdepots/reset/reset_sdp.sh -C > /hxdepots/reset/settings.cfg 
+
+- name: Make installer cfg
+  ansible.builtin.shell: /hxdepots/reset/reset_sdp.sh -c /hxdepots/reset/settings.cfg 2>&1 | tee log.reset_sdp
+  become: yes
+  become_user: root
