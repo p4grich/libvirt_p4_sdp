@@ -1,23 +1,47 @@
-  - name: Add hxlogs path
-    ansible.builtin.file:
-      path: /hxlogs
-      state: directory
-      owner: perforce
-      group: perforce
-      mode: '0755'
+- name: Add hxlogs directory
+  ansible.builtin.file:
+    path: /hxlogs
+    state: directory
+    owner: perforce
+    group: perforce
+    mode: '0755'
 
-  - name: Add hxdepots path
-    ansible.builtin.file:
-      path: /hxdepots
-      state: directory
-      owner: perforce
-      group: perforce
-      mode: '0755'
+- name: Add hxdepots directory
+  ansible.builtin.file:
+    path: /hxdepots
+    state: directory
+    owner: perforce
+    group: perforce
+    mode: '0755'
 
-  - name: Add hxmetadata path
-    ansible.builtin.file:
-      path: /hxmetadata
-      state: directory
-      owner: perforce
-      group: perforce
-      mode: '0755'
+- name: Add hxmetadata directory
+  ansible.builtin.file:
+    path: /hxmetadata
+    state: directory
+    owner: perforce
+    group: perforce
+    mode: '0755'
+
+- name: Get NFS host IP Address
+  ansible.builtin.shell: "nslookup {{sdp_commit_nfs_host}} |grep Address |grep -v \\# |awk '{print $2}'"
+  register: nfs_host_ip
+
+- name: Add NFS mounts
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    line: "{{nfs_host_ip.stdout}}:/nfs/hxdepots /hxdepots nfs defaults 0 0"
+    insertafter: '^#'
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Run NFS mount
+  ansible.builtin.shell: "mount /hxdepots"
+  register: nfs_mount_status
+
+- name: Create ansible temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    path: ~/.ansible/tmp
+  become: true
+  become_user: perforce
