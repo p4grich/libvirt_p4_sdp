@@ -37,3 +37,21 @@ def test_dir_hxmetadata(host):
 def test_package_install(host):
     assert host.package("unzip").is_installed
     assert host.package("bind-utils").is_installed
+    assert host.package("unzip").is_installed
+    assert host.package("bc").is_installed
+    assert host.package("cronie").is_installed
+    assert host.package("curl").is_installed
+    assert host.package("gcc").is_installed
+    assert host.package("gcc-c++").is_installed
+    assert host.package("mailx").is_installed
+    assert host.package("make").is_installed
+    assert host.package("openssl").is_installed
+    assert host.package("openssl-devel").is_installed
+    assert host.package("rsync").is_installed
+    assert host.package("tar").is_installed
+    assert host.package("wget").is_installed
+    assert host.package("which").is_installed
+    assert host.package("zlib").is_installed
+    assert host.package("zlib-devel").is_installed
+    assert host.package("policycoreutils-python-utils").is_installed
+

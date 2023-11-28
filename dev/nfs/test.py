@@ -38,7 +38,7 @@ def test_dir_hxdepots(host):
 
 def test_file_export_commit(host, ansible_vars):
     print("Network: ", ansible_vars['network_cidr'])
-    assert host.file("/etc/exports").content_string.splitlines()[0] == '/nfs/hxdepots ' + ansible_vars['network_cidr'] + '(rw,sync,subtree_check)'
+    assert host.file("/etc/exports").content_string.splitlines()[0] == '/nfs/hxdepots ' + ansible_vars['network_cidr'] + '(rw,sync,subtree_check,no_root_squash)'
 
 def test_idmap_domain(host, ansible_magic_vars):
     print("Domain: ", ansible_magic_vars['ansible_domain'])

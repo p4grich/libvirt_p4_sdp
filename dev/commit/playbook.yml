@@ -5,8 +5,8 @@
     - { role: ../../ansible/roles/Debian, when: ansible_os_family == 'Debian' }
     - { role: ../../ansible/roles/RedHat, when: ansible_os_family == 'RedHat' }
     - { role: ../../ansible/roles/SDP, when: sdp_role == 'commit' }
-    - { role: ../../ansible/roles/SDP-manual, when: (sdp_role == 'commit') and (sdp_green_field_installer == 'no') }
-    - { role: ../../ansible/roles/SDP-greenfield, when: sdp_role == 'commit' and (sdp_green_field_installer == 'yes') }
+    - { role: ../../ansible/roles/SDP-manual, when: (sdp_role == 'commit') and (sdp_green_field_installer == 'no'), become:     yes, become_user: perforce }
+    - { role: ../../ansible/roles/SDP-greenfield, when: sdp_role == 'commit' and (sdp_green_field_installer == 'yes'), become: yes, become_user: perforce }
 
   tasks:
   - name: Dump Facts

@@ -14,6 +14,28 @@
     name: 'unzip'
     state: latest
 
+- name: Install SDP Deps
+  ansible.builtin.yum:
+    name:
+      - unzip
+      - bc
+      - cronie
+      - curl
+      - gcc
+      - gcc-c++
+      - mailx
+      - make
+      - openssl
+      - openssl-devel
+      - rsync
+      - tar
+      - wget
+      - which
+      - zlib
+      - zlib-devel
+      - policycoreutils-python-utils
+    state: latest
+
 - name: Check if reboot_required
   shell:
     cmd: "needs-restarting -r"
