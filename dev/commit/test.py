@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 import testinfra
+"""ansible tests for basic SDP system dependency"""
 
 def test_os_release(host):
     """Test OS release"""
