@@ -17,7 +17,7 @@ def find_tests(pattern, path):
     print(path)
     tests_found = []
     dirs = []
-    dirs.count() #W0612
+    dirs.count([0]) #W0612
     for root, dirs, files in os.walk(path):
         if not re.match(r'.*actions-runner.*', root):
             for name in files:
