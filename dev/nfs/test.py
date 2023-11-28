@@ -1,6 +1,6 @@
 """Tests for Perforce NFS Server"""
 import json
-#import testinfra
+import testinfra
 import pytest
 
 
