@@ -1,11 +1,10 @@
-import pytest
 import testinfra
 
 def test_os_release(host):
     assert host.file("/etc/os-release").contains("Rocky")
 
 def test_sshd_inactive(host):
-    assert host.service("sshd").is_running is True 
+    assert host.service("sshd").is_running is True
 
 def test_perforce_user(host):
     assert host.user("perforce").exists is True
@@ -54,4 +53,3 @@ def test_package_install(host):
     assert host.package("zlib").is_installed
     assert host.package("zlib-devel").is_installed
     assert host.package("policycoreutils-python-utils").is_installed
-
