@@ -1,8 +1,6 @@
 """Tests for Perforce NFS Server"""
 import json
-import testinfra
 import pytest
-
 
 @pytest.fixture(name="ansible_vars")
 def fixture_ansible_vars(host):
