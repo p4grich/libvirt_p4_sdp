@@ -39,3 +39,4 @@ versions.tf
 .vaultpass
 tf.log
 dump_facts.json
+actions-runner
