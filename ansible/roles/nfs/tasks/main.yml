@@ -29,7 +29,7 @@
     owner: root
     group: root
     mode: '0544'
-    line: "/nfs/hxdepots {{ network_cidr }}(rw,sync,subtree_check)"
+    line: "/nfs/hxdepots {{ network_cidr }}(rw,sync,subtree_check,no_root_squash)"
 
 - name: Enable service rpcbind and start
   ansible.builtin.service:
