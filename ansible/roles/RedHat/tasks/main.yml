@@ -17,6 +17,7 @@
 - name: Install SDP Deps
   ansible.builtin.yum:
     name:
+      - yum-utils
       - unzip
       - bc
       - cronie

@@ -27,9 +27,17 @@
     group: perforce
 
 - name: Make installer cfg
-  ansible.builtin.shell: /hxdepots/reset/reset_sdp.sh -C > /hxdepots/reset/settings.cfg 
+  ansible.builtin.shell: /hxdepots/reset/reset_sdp.sh -C > /hxdepots/reset/settings.cfg
+  when: sdp_release_branch == true
 
 - name: Run installer cfg
   ansible.builtin.shell: /hxdepots/reset/reset_sdp.sh -c /hxdepots/reset/settings.cfg 2>&1 | tee log.reset_sdp
   become: yes
   become_user: root
+  when: sdp_release_branch == true
+
+- name: Run dev installer cfg
+  ansible.builtin.shell: /hxdepots/reset/reset_sdp.sh -b dev 2>&1 | tee log.reset_sdp
+  become: yes
+  become_user: root
+  when: sdp_release_branch == false
